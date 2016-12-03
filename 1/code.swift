@@ -54,6 +54,10 @@ struct Point {
     let nextY = y + distance * direction.scaleY
     return Point(nextX, nextY)
   }
+  
+  var distanceToOrigin : Int {
+    return abs(self.x) + abs(self.y)
+  }
 }
 
 struct Line {
@@ -101,7 +105,7 @@ for move in CommandLine.arguments.dropFirst(1) {
   locations.append(point)
 }
 
-print(abs(point.x) + abs(point.y))
+print("distance to origin: \(point.distanceToOrigin)")
 
 var lines = [Line]()
 var previousPoint = locations[0]
@@ -125,7 +129,7 @@ for (index, lineA) in lines.enumerated() {
 }
 
 if intersection != nil {
-  print(abs(intersection!.x) + abs(intersection!.y))
+  print("first intersection: \(intersection!.distanceToOrigin)")
 } else {
   print("never intersects")
 }
