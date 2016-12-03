@@ -14,174 +14,36 @@ enum Direction : Character {
   }
 }
 
-enum KeyPad : Int {
-  case One = 1, Two, Three, Four, Five, Six, Seven, Eight, Nine, A, B, C, D
+enum KeyPad : String {
+  case One = "1", Two = "2", Three = "3", Four = "4", Five = "5", Six = "6", Seven = "7", Eight = "8", Nine = "9", A = "A", B = "B", C = "C", D = "D"
+  
+  var moveMap : Dictionary<Direction, KeyPad> {
+    switch self {
+      case .One : return [ .Down : .Three ] 
+      case .Two : return [ .Right : .Three, .Down : .Six ]
+      case .Three : return [ .Up : .One, .Left : .Two, .Right : .Four, .Down : .Seven ]
+      case .Four : return [ .Left : .Three, .Down : .Eight ]
+      case .Five : return [ .Right : .Six ]
+      case .Six : return [ .Up : .Two, .Left : .Five, .Right : .Seven, .Down : .A ]
+      case .Seven : return [ .Up : .Three, .Left : .Six, .Right : .Eight, .Down : .B ]
+      case .Eight : return [ .Up : .Four, .Left : .Seven, .Right : .Nine, .Down : .C ]
+      case .Nine : return [ .Left : .Eight ]
+      case .A : return [ .Up : .Six, .Right : .B ]
+      case .B : return [ .Up : .Seven, .Left : .A, .Right : .C, .Down : .D ]
+      case .C : return [ .Up : .Eight, .Left : .B ]
+      case .D : return [ .Up : .B ]
+    }
+  }
   
   mutating func move(_ direction : Direction) {
-    switch self {
-      case .One:
-        self = direction == .Down ? .Three : self
-        break
-      case .Two:
-        switch direction {
-          case .Right: 
-            self = .Three
-            break
-          case .Down:
-            self = .Six
-            break
-          default:
-            break
-        }
-        break
-      case .Three:
-        switch direction {
-          case .Up: 
-            self = .One
-            break
-          case .Left:
-            self = .Two
-            break
-          case .Right: 
-            self = .Four
-            break
-          case .Down:
-            self = .Seven
-            break
-        }
-        break
-      case .Four:
-        switch direction {
-          case .Left:
-            self = .Three
-            break
-          case .Down:
-            self = .Eight
-            break
-          default:
-            break
-        }
-        break
-      case .Five:
-        switch direction {
-          case .Right: 
-            self = .Six
-            break
-          default:
-            break
-        }
-        break
-      case .Six:
-        switch direction {
-          case .Up: 
-            self = .Two
-            break
-          case .Left:
-            self = .Five
-            break
-          case .Right: 
-            self = .Seven
-            break
-          case .Down:
-            self = .A
-            break
-        }
-        break
-      case .Seven:
-        switch direction {
-          case .Up: 
-            self = .Three
-            break
-          case .Left:
-            self = .Six
-            break
-          case .Right: 
-            self = .Eight
-            break
-          case .Down:
-            self = .B
-            break
-        }
-        break
-      case .Eight:
-        switch direction {
-          case .Up: 
-            self = .Four
-            break
-          case .Left:
-            self = .Seven
-            break
-          case .Right: 
-            self = .Nine
-            break
-          case .Down:
-            self = .C
-            break
-        }
-        break
-      case .Nine:
-        switch direction {
-          case .Left:
-            self = .Eight
-            break
-          default:
-            break
-        }
-        break
-      case .A:
-        switch direction {
-          case .Up: 
-            self = .Six
-            break
-          case .Right: 
-            self = .B
-            break
-          default:
-            break
-        }
-        break
-      case .B:
-        switch direction {
-          case .Up: 
-            self = .Seven
-            break
-          case .Left:
-            self = .A
-            break
-          case .Right: 
-            self = .C
-            break
-          case .Down:
-            self = .D
-            break
-        }
-        break
-      case .C:
-        switch direction {
-          case .Up: 
-            self = .Eight
-            break
-          case .Left:
-            self = .B
-            break
-          default:
-            break
-        }
-        break
-      case .D:
-        switch direction {
-          case .Up: 
-            self = .B
-            break
-          default:
-            break
-        }
-        break
+    if let nextKeyPad = self.moveMap[direction] {
+      self = nextKeyPad
     }
   }
 }
 
 var currentKey = KeyPad.Five
+var keys = [KeyPad]()
 
 for moves in arguments {
   var move = Direction.directions(moves)
@@ -190,5 +52,7 @@ for moves in arguments {
     currentKey.move(direction)
   }
   
-  print(currentKey)
+  keys.append(currentKey)
 }
+
+print(keys.map { $0.rawValue }.joined())
