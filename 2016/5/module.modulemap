@@ -1,0 +1,4 @@
+module CommonCrypto [system] [extern_c] {
+  umbrella "/usr/include/CommonCrypto"
+  export *
+}
